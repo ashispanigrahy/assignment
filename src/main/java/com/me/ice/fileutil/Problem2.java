@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 import org.apache.log4j.Logger;
 
@@ -71,8 +72,8 @@ public class Problem2 {
         try {
             fisFirstFile = new FileInputStream(firstFilePath);
             fisSecondFile = new FileInputStream(secondFilePath);
-            scannerFirst = new Scanner(fisFirstFile, "UTF-8");
-            scannerSecond = new Scanner(fisSecondFile, "UTF-8");
+            scannerFirst = new Scanner(fisFirstFile, StandardCharsets.UTF_8);
+            scannerSecond = new Scanner(fisSecondFile, StandardCharsets.UTF_8);
 
             op = new FileOutputStream(mergedFilePath);
             dos = new DataOutputStream(op);
@@ -128,13 +129,13 @@ public class Problem2 {
     }
 
     private void writeToResultFile(DataOutputStream dos, String lineFromSecondFile) throws IOException {
-        byte[] data = lineFromSecondFile.getBytes("UTF-8");
+        byte[] data = lineFromSecondFile.getBytes(StandardCharsets.UTF_8);
 
         dos.write(data);
         dos.writeBytes(newLine);
     }
 
-    public static String readNextLine(Scanner scanner) {
+    private static String readNextLine(Scanner scanner) {
         if (scanner.hasNextLine()) {
             return scanner.nextLine();
         } else {

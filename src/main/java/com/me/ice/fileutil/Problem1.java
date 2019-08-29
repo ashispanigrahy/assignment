@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -84,7 +85,7 @@ public class Problem1 {
         try {
             long startTime = System.currentTimeMillis();
             fileInputStream = new FileInputStream(filePath);
-            scanner = new Scanner(fileInputStream, "UTF-8");
+            scanner = new Scanner(fileInputStream, StandardCharsets.UTF_8);
 
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();

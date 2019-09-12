@@ -6,9 +6,17 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Stream;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
 
@@ -72,11 +80,38 @@ public class Problem1 {
     public void checkAndProcessFile(String filePath) throws FileNotFoundException {
         if (new File(filePath).exists()) {
             this.readFile(filePath);
+            this.readFileNew(filePath);
         } else {
             throw new FileNotFoundException("File not found");
         }
     }
 
+    public void readFileNew(String filePath) {
+        Instant startTime = Instant.now();
+        Map<String, BigDecimal> closingDetails = new HashMap<>();
+
+        AtomicReference<String> lastId = new AtomicReference<>();
+        try (Stream<String> lines = Files.lines(Paths.get(filePath))) {
+            lines.forEachOrdered(line -> {
+                if (checkIfValueIsId(line)) {
+                    lastId.set(line);
+                } else {
+                    closingDetails.put(lastId.get(), new BigDecimal(line));
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        for (String cusId : closingDetails.keySet()) {
+            System.out.println("cusId = " + cusId + " Closing price = " + closingDetails.get(cusId));
+        }
+        Instant endTime = Instant.now();
+        System.out.println("Duration.between(startTime,endTime).toMillis() = " + Duration.between(startTime, endTime).toMillis());
+
+    }
+
+    @Deprecated
     public void readFile(String filePath) {
         FileInputStream fileInputStream = null;
         Scanner scanner = null;
